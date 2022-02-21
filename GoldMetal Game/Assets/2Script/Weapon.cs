@@ -54,7 +54,7 @@ public class Weapon : MonoBehaviour
 
         yield return null;
 
-        GameObject instantCase = Instantiate(bulletCase, bulletPos.position, bulletCasePos.rotation);
+        GameObject instantCase = Instantiate(bulletCase, bulletCasePos.position, bulletCasePos.rotation);
         Rigidbody caseRigid = instantCase.GetComponent<Rigidbody>();
         Vector3 caseVec = bulletCasePos.forward * Random.Range(-3, -2) + Vector3.up * Random.Range(2, 3);
         caseRigid.AddForce(caseVec, ForceMode.Impulse);

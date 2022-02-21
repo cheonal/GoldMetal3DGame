@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 
-
+    // Start is called before the first frame update
     public float speed;
     public GameObject[] Weapons;
     public bool[] hasWeapons;
@@ -36,7 +36,7 @@ public class Player : MonoBehaviour
     bool gDown;
     bool isjump;
     bool isDodge;
-    //bool isReload;
+    bool isReload;
     bool iDown;
     bool sDown1;
     bool sDown2;
@@ -64,7 +64,7 @@ public class Player : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
     }
-
+    // Update is called once per frame
     void Update()
     {
         Getinput();
@@ -75,7 +75,7 @@ public class Player : MonoBehaviour
         Interation();
         Swap();
         Attack();
-      //  Reload();
+        Reload();
         Grenade();
 
     }
@@ -106,19 +106,19 @@ public class Player : MonoBehaviour
         sDown1 = Input.GetButtonDown("Swap1");
         sDown2 = Input.GetButtonDown("Swap2");
         sDown3 = Input.GetButtonDown("Swap3");
-        //rdown = Input.GetButtonDown("Reload");
+        rdown = Input.GetButtonDown("Reload");
     }
 
     void Move()
     {
         moveVec = new Vector3(hAxis, 0, vAxis).normalized;
 
-        if (isDodge || !isFireReady /*||*/ /*isReload*/)
+        if (isDodge)
         {
             moveVec = DodgeVec;
         }
 
-        if (isSwap || fDown)
+        if (isSwap || isReload || !isFireReady)
         {
             moveVec = Vector3.zero;
         }
@@ -138,6 +138,7 @@ public class Player : MonoBehaviour
         //2 마우스에 의한 회전
         if (fDown)
         {
+            moveVec = Vector3.zero;
             Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayhit;
             if (Physics.Raycast(ray, out rayhit, 100))
@@ -165,7 +166,7 @@ public class Player : MonoBehaviour
         if (hasGrenades == 0)
             return;
 
-        if (gDown && !/*isReload &&*/ !isSwap)
+        if (gDown && !isReload && !isSwap)
         {
             Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayhit;
@@ -200,7 +201,7 @@ public class Player : MonoBehaviour
 
         }
     }
-   /* void Reload()
+    void Reload()
     {
         if (equipWeapon == null)
             return;
@@ -211,24 +212,24 @@ public class Player : MonoBehaviour
         if (ammo == 0)
             return;
 
-        if (rdown && !isjump && !isDodge && !isSwap && isFireReady)
+        if (rdown && !isjump && !isDodge && !isSwap && isFireReady && !isReload)
         {
             anim.SetTrigger("doReload");
             isReload = true;
 
             Invoke("ReloadOut", 3f);
         }
-    }*/
-    /*void ReloadOut()
+    }
+    void ReloadOut()
     {
         int reAmmo = ammo < equipWeapon.maxAmmo ? ammo : equipWeapon.maxAmmo;
         equipWeapon.curAmmo = reAmmo;
         ammo -= reAmmo;
         isReload = false;
-    }*/
+    }
     void Dodge()
     {
-        if (jdown && moveVec != Vector3.zero && !isjump && !isDodge && !isSwap)
+        if (jdown && moveVec != Vector3.zero && !isjump && !isDodge && !isSwap && !fDown)
         {
             DodgeVec = moveVec;
             speed *= 2;
@@ -247,12 +248,13 @@ public class Player : MonoBehaviour
     {
         speed *= 0.5f;
         isDodge = false;
+
     }
 
     void SwapOut()
     {
         isSwap = false;
-    }       
+    }
     void Swap()
     {
         if (sDown1 && (!hasWeapons[0] || equipWeaponIndex == 0))
@@ -285,7 +287,6 @@ public class Player : MonoBehaviour
             Invoke("SwapOut", 0.4f);
         }
     }
-    
     void Interation()
     {
         if (iDown && nearObject != null && !isjump && !isDodge)
@@ -301,7 +302,7 @@ public class Player : MonoBehaviour
 
         }
     }
-    
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Floor")
@@ -310,7 +311,6 @@ public class Player : MonoBehaviour
             anim.SetBool("isJump", false);
         }
     }
-    
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Item")
