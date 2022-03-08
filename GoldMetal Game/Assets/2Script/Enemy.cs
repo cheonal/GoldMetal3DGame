@@ -7,7 +7,10 @@ public class Enemy : MonoBehaviour
     public int maxhelath;
     public int curhealth;
     public Transform Target;
+    public BoxCollider meleeArea;   
     public bool isChase;
+    public bool isAttack;
+
 
     Rigidbody rigid;
     BoxCollider boxCollider;
@@ -33,8 +36,12 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if(isChase)
-        nav.SetDestination(Target.position);
+        if (nav.enabled)
+        {
+            nav.SetDestination(Target.position);
+            nav.isStopped = !isChase;
+        }
+        
     }
     void FreezeVelocity()
     {
@@ -44,8 +51,41 @@ public class Enemy : MonoBehaviour
             rigid.angularVelocity = Vector3.zero;
         }
     }
+    void Targeting()
+    {
+        float targetRadius = 1.5f;
+        float targetRange = 3f;
+        RaycastHit[] rayHits =
+           Physics.SphereCastAll(transform.position, targetRadius, 
+                                 transform.forward, targetRange, 
+                                 LayerMask.GetMask("Player"));
+
+        if(rayHits.Length > 0 && !isAttack)
+        {
+            StartCoroutine(Attack());
+        }
+
+    }
+
+    IEnumerator Attack()
+    {
+        isChase = false;
+        isAttack = true;
+        anim.SetBool("isAttack", true);
+
+        yield return new WaitForSeconds(0.2f);
+        meleeArea.enabled = true;
+
+        yield return new WaitForSeconds(1f);
+        meleeArea.enabled = false;
+
+        isChase = true;
+        isAttack = false;
+        anim.SetBool("isAttack", false);
+    }
     void FixedUpdate()
     {
+        Targeting();
         FreezeVelocity();
 
     }
