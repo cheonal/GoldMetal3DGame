@@ -10,6 +10,8 @@ TagManager:
   - Melee
   - Range
   - Bullet
+  - Wall
+  - Enemy
   layers:
   - Default
   - TransparentFX
