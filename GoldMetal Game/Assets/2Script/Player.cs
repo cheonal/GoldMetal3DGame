@@ -68,8 +68,12 @@ public class Player : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         rigid = GetComponent<Rigidbody>();
         meshs = GetComponentsInChildren<MeshRenderer>();
+
+        
+       // PlayerPrefs.SetInt("MaxScore", 112500);
+        Debug.Log(PlayerPrefs.GetInt("MaxScore"));
     }
-    // Update is called once per frame
+
     void Update()
     {
         Getinput();
@@ -296,7 +300,6 @@ public class Player : MonoBehaviour
     {
         if (iDown && nearObject != null && !isjump && !isDodge)
         {
-            Debug.Log(nearObject);
             if (nearObject.tag == "Weapon")
             {
                 Item item = nearObject.GetComponent<Item>();
