@@ -8,9 +8,11 @@ public class Enemy : MonoBehaviour
     public Type enemyType; 
     public int maxhelath;
     public int curhealth;
+    public int score;
     public Transform Target;
     public BoxCollider meleeArea;
     public GameObject Bullet;
+    public GameObject[] coins;
 
     public bool isChase;
     public bool isAttack;
@@ -204,6 +206,11 @@ public class Enemy : MonoBehaviour
             isChase = false;
             nav.enabled = false;
             anim.SetTrigger("doDie");
+            Player player = Target.GetComponent<Player>();
+            player.score += score;
+            int ranCoin = Random.Range(0, 3);
+            Instantiate(coins[ranCoin], transform.position, Quaternion.identity);
+
             if (isGrenade)
             {
                 reactVec = reactVec.normalized;
@@ -220,10 +227,9 @@ public class Enemy : MonoBehaviour
                 rigid.AddForce(reactVec * 5, ForceMode.Impulse);
 
             }
-            if(enemyType != Type.D)
-            {
+
                 Destroy(gameObject, 4);
-            }
+
 
 
         }
