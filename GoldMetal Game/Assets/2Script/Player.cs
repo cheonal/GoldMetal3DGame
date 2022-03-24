@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     public int ammo;
     public int coin;
     public int health;
+    public int score;
 
 
     public int maxammo;
@@ -55,7 +56,7 @@ public class Player : MonoBehaviour
     MeshRenderer[] meshs; 
      
     GameObject nearObject;
-    Weapon equipWeapon;
+    public Weapon equipWeapon;
     int equipWeaponIndex = -1;
     float fireDelay;
 
@@ -71,7 +72,6 @@ public class Player : MonoBehaviour
 
         
        // PlayerPrefs.SetInt("MaxScore", 112500);
-        Debug.Log(PlayerPrefs.GetInt("MaxScore"));
     }
 
     void Update()
@@ -401,7 +401,6 @@ public class Player : MonoBehaviour
         if (other.tag == "Weapon" || other.tag == "Shop")
         {
             nearObject = other.gameObject;
-            Debug.Log(nearObject);
         }
 
 

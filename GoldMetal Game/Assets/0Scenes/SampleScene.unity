@@ -205,7 +205,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1908835}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2055295814}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: Gamestart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1908835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1080,7 +1092,7 @@ GameObject:
   - component: {fileID: 144832578}
   - component: {fileID: 144832577}
   m_Layer: 5
-  m_Name: 'Heart Image '
+  m_Name: 'Health Image '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1155,7 +1167,7 @@ GameObject:
   - component: {fileID: 146379446}
   - component: {fileID: 146379445}
   m_Layer: 5
-  m_Name: 'Heart Image '
+  m_Name: 'Coin Image '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1413,7 +1425,7 @@ GameObject:
   - component: {fileID: 182392637}
   - component: {fileID: 182392636}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Boss Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1702,7 +1714,7 @@ GameObject:
   - component: {fileID: 223313721}
   - component: {fileID: 223313720}
   m_Layer: 5
-  m_Name: Heart Text
+  m_Name: Health Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2722,7 +2734,7 @@ GameObject:
   - component: {fileID: 343051179}
   - component: {fileID: 343051178}
   m_Layer: 5
-  m_Name: Heart Text
+  m_Name: Coin Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3785,7 +3797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 3
   maxhelath: 100
-  curhealth: 100
+  curhealth: 0
   Target: {fileID: 565069811}
   meleeArea: {fileID: 1822282411}
   Bullet: {fileID: 9021314749832704832, guid: 02032249f60f45c4c9ec233dd7938e83, type: 3}
@@ -4041,10 +4053,12 @@ MonoBehaviour:
   ammo: 100
   coin: 4000
   health: 100
+  score: 0
   maxammo: 999
   maxcoin: 999
   maxhealth: 999
   maxhasGrenades: 999
+  equipWeapon: {fileID: 0}
 --- !u!136 &565069809
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11389,7 +11403,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &963194226
 AudioListener:
   m_ObjectHideFlags: 0
@@ -11449,7 +11463,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
-  m_LocalPosition: {x: 0, y: 20, z: -11}
+  m_LocalPosition: {x: 0, y: 26, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -11467,7 +11481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 171bcb867287c6045a868e39a57b53f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 20, z: -11}
+  offset: {x: 0, y: 26, z: -11}
   target: {fileID: 565069811}
 --- !u!1 &973776865
 GameObject:
@@ -12186,7 +12200,7 @@ GameObject:
   - component: {fileID: 1113655294}
   - component: {fileID: 1113655293}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Boss Txt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28692,7 +28706,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!95 &1610818908
 Animator:
   serializedVersion: 3
@@ -35058,6 +35072,10 @@ PrefabInstance:
       value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 5461052779654786451, guid: 8f5e135a19626f544908fc8f156144b9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5461052779654786451, guid: 8f5e135a19626f544908fc8f156144b9, type: 3}
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -41128,18 +41146,18 @@ MonoBehaviour:
   scoreTxt: {fileID: 2093761560}
   stageTxt: {fileID: 1381300786}
   playTimeTxt: {fileID: 1932970060}
-  playerHealthTxt: {fileID: 0}
-  playerAmmoTxt: {fileID: 0}
-  playerCoinTxt: {fileID: 0}
-  weapon1Img: {fileID: 0}
-  weapon2Img: {fileID: 0}
-  weapon3Img: {fileID: 0}
-  weaponRImg: {fileID: 0}
-  enemyATxt: {fileID: 0}
-  enemyBTxt: {fileID: 0}
-  enemyCTxt: {fileID: 0}
-  bossHealthGroup: {fileID: 0}
-  bossHealthBar: {fileID: 0}
+  playerHealthTxt: {fileID: 223313720}
+  playerAmmoTxt: {fileID: 1182987156}
+  playerCoinTxt: {fileID: 343051178}
+  weapon1Img: {fileID: 251348436}
+  weapon2Img: {fileID: 312090767}
+  weapon3Img: {fileID: 218144416}
+  weaponRImg: {fileID: 580903542}
+  enemyATxt: {fileID: 1567676991}
+  enemyBTxt: {fileID: 1233316616}
+  enemyCTxt: {fileID: 1231830243}
+  bossHealthGroup: {fileID: 1134583361}
+  bossHealthBar: {fileID: 57753478}
 --- !u!4 &2055295815
 Transform:
   m_ObjectHideFlags: 0
