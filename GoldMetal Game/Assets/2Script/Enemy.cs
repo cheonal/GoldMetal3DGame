@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     public BoxCollider meleeArea;
     public GameObject Bullet;
     public GameObject[] coins;
+    public GameManager manager;
 
     public bool isChase;
     public bool isAttack;
@@ -206,11 +207,27 @@ public class Enemy : MonoBehaviour
             isChase = false;
             nav.enabled = false;
             anim.SetTrigger("doDie");
+
             Player player = Target.GetComponent<Player>();
             player.score += score;
             int ranCoin = Random.Range(0, 3);
             Instantiate(coins[ranCoin], transform.position, Quaternion.identity);
 
+            switch (enemyType)
+            {
+                case Type.A:
+                    manager.enemyCntA--;
+                    break;
+                case Type.B:
+                    manager.enemyCntB--;
+                    break;
+                case Type.C:
+                    manager.enemyCntC--;
+                    break;
+                case Type.D:
+                    manager.enemyCntD--;
+                    break;
+            }
             if (isGrenade)
             {
                 reactVec = reactVec.normalized;

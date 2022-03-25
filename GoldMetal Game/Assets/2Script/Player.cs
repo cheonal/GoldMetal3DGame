@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public int hasGrenades;
     public Camera followCamera;
     public GameObject grenadeObject;
+    public GameManager manager;
 
 
     public int ammo;
@@ -47,6 +48,7 @@ public class Player : MonoBehaviour
     bool isBorder;
     bool isDamage;
     bool isShop;
+    bool isDead;
 
     Vector3 moveVec;
     Vector3 DodgeVec;
@@ -86,6 +88,7 @@ public class Player : MonoBehaviour
         Attack();
         Reload();
         Grenade();
+
 
     }
 
@@ -127,7 +130,7 @@ public class Player : MonoBehaviour
             moveVec = DodgeVec;
         }
 
-        if (isSwap || isReload || !isFireReady)
+        if (isSwap || isReload || !isFireReady || isDead)
         {
             moveVec = Vector3.zero;
         }
@@ -145,7 +148,7 @@ public class Player : MonoBehaviour
         //1 키보드에 의한 회전
         transform.LookAt(transform.position + moveVec);
         //2 마우스에 의한 회전
-        if (fDown)
+        if (fDown && !isDead)
         {
             moveVec = Vector3.zero;
             Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
@@ -161,7 +164,7 @@ public class Player : MonoBehaviour
 
     void Jump()
     {
-        if (jdown && moveVec == Vector3.zero && !isjump && !isDodge && !isSwap)
+        if (jdown && moveVec == Vector3.zero && !isjump && !isDodge && !isSwap && !isDead)
         {
             rigid.AddForce(Vector3.up * 15, ForceMode.Impulse);
             isjump = true;
@@ -175,7 +178,7 @@ public class Player : MonoBehaviour
         if (hasGrenades == 0)
             return;
 
-        if (gDown && !isReload && !isSwap)
+        if (gDown && !isReload && !isSwap && !isDead )
         {
             Ray ray = followCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit rayhit;
@@ -202,7 +205,7 @@ public class Player : MonoBehaviour
         fireDelay += Time.deltaTime;
         isFireReady = equipWeapon.rate < fireDelay;
 
-        if (fDown && isFireReady && !isDodge && !isSwap && !isShop)
+        if (fDown && isFireReady && !isDodge && !isSwap && !isShop && !isDead)
         {
             equipWeapon.Use();
             anim.SetTrigger(equipWeapon.type == Weapon.Type.Melee ? "doSwing" : "doShot");
@@ -221,7 +224,7 @@ public class Player : MonoBehaviour
         if (ammo == 0)
             return;
 
-        if (rdown && !isjump && !isDodge && !isSwap && isFireReady && !isReload && !isShop)
+        if (rdown && !isjump && !isDodge && !isSwap && isFireReady && !isReload && !isShop && !isDead) 
         {
             anim.SetTrigger("doReload");
             isReload = true;
@@ -238,7 +241,7 @@ public class Player : MonoBehaviour
     }
     void Dodge()
     {
-        if (jdown && moveVec != Vector3.zero && !isjump && !isDodge && !isSwap && !fDown)
+        if (jdown && moveVec != Vector3.zero && !isjump && !isDodge && !isSwap && !fDown && !isDead)
         {
             DodgeVec = moveVec;
             speed *= 2;
@@ -277,7 +280,7 @@ public class Player : MonoBehaviour
         if (sDown2) weaponIndex = 1;
         if (sDown3) weaponIndex = 2;
 
-        if (sDown1 || sDown2 || sDown3 && !isjump && !isDodge)
+        if (sDown1 || sDown2 || sDown3 && !isjump && !isDodge && !isDead)
         {
             if (equipWeapon != null)
             {
@@ -298,7 +301,7 @@ public class Player : MonoBehaviour
     }
     void Interation()
     {
-        if (iDown && nearObject != null && !isjump && !isDodge)
+        if (iDown && nearObject != null && !isjump && !isDodge && !isDead)
         {
             if (nearObject.tag == "Weapon")
             {
@@ -386,6 +389,10 @@ public class Player : MonoBehaviour
         {
             rigid.AddForce(transform.forward * -25, ForceMode.Impulse);
         }
+        if (health <= 0 && !isDead)
+        {
+            Ondie();
+        }
         yield return new WaitForSeconds(1f);
 
         isDamage = false;
@@ -395,6 +402,13 @@ public class Player : MonoBehaviour
         }
         if (isBossAtk)
             rigid.velocity = Vector3.zero;
+
+    }
+    void Ondie()
+    {
+        anim.SetTrigger("doDie");
+        isDead = true;
+        manager.GamesOver();
     }
     void OnTriggerStay(Collider other)
     {
